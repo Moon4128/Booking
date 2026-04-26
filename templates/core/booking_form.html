@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Броювання кімнати №{{ room.number }}</h1>
+
+    {% if room.image %}
+        <img src="{{ room.image.url }}" alt="Зображення кімнати {{ room.number }}" width="300" height="200">
+    {% endif %}
+
+<p>Категорія: {{ room.category.title }}</p>
+<p>Місць: ${{room.capacity}}</p>
+<p>Ціна: ${{room.price}} грн/ніч</p>
+
+<hr>
+{% if messages %}
+    {% for message in messages %}
+    <p><strong>{{ message }}</strong></p>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <label for="start_date">Дата заїзду:</label>
+    <input type="date" id="start_date" name="start_date" required><br><br>
+
+    <label for="end_date">Дата виїзду:</label>
+    <input type="date" id="end_date" name="end_date" required><br><br>
+
+    <button type="submit">Підтвердити бронювання</button>
+    <a href="{% url 'rooms' %}">Скасувати</a>
+</form>
+
+{% endblock %}
