@@ -28,7 +28,7 @@
             <h2>{{ room.number}} - {{ room.category.title}}</h2>
             <p>Місць: {{room.capacity}}</p>
             <p>${{room.price}}</p>
-            <a href = "#">Забронювати</a>
+            <a href = "{% url 'booking' room_id=room.pk %}">Забронювати</a>
             <hr>
         {%endfor%}
 
