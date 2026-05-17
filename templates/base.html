@@ -12,9 +12,9 @@
                 <li><a href="{% url 'rooms' %}">Головна</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'user_bookings' %}">Ваші бронювання</a></li>
-                <li><a href="#">Вийти</a></li>
+                <li><a href="{% url 'logout' %}">Вийти</a></li>
                 {% else %}
-                <li><a href="#">Увійти</a></li>
+                <li><a href="{% url 'login' %}">Увійти</a></li>
                 {% endif %}
             </ul>
         </nav>

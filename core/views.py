@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Room, Category, Booking
 import datetime
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login, logout
 
 def room_list(request):
     all_rooms = Room.objects.all()
@@ -66,3 +68,37 @@ def user_bookings(request):
         'bookings': Booking.objects.filter(user=user).order_by('-start_date')
     }
     return render(request=request, template_name='core/my_bookings.html', context=context)
+
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request=request, data = request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('rooms')
+
+    else:
+        form = AuthenticationForm()
+
+    return render(request=request, template_name='auth/login.html', context={'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('rooms')
+
+def user_register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            login(request, new_user)
+            return redirect('rooms')
+
+    else:
+        form = UserCreationForm()
+
+    return render(request=request, template_name='auth/register.html', context={'form': form})
